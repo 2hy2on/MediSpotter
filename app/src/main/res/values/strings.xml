@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MediSpotter</string>
+    <string name="hospital_url">http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire</string>
 </resources>
