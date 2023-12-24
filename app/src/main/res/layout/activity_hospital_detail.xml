@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HospitalDetailActivity">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="병원 이름"
+        android:textSize="40dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <CheckBox
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:button="@drawable/selector_star"
+        app:layout_constraintBottom_toBottomOf="@+id/name"
+        app:layout_constraintStart_toEndOf="@+id/name" />
+
+    <ImageView
+        android:id="@+id/addrIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:src="@drawable/baseline_location_on_24"
+
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/addr"
+        />
+
+    <TextView
+        android:id="@+id/addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="서울특별시 강남구 봉은사로 612 (삼성동)"
+        app:layout_constraintStart_toEndOf="@+id/addrIcon"
+        android:layout_marginLeft="5dp"
+        android:textSize="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        android:layout_marginTop="50dp"
+        />
+
+ =
+    <ImageView
+        android:id="@+id/typeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_local_hospital_24"
+        app:layout_constraintStart_toStartOf="@+id/addrIcon"
+        app:layout_constraintTop_toBottomOf="@id/addrIcon"
+        android:layout_marginTop="25dp"
+        />
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/addr"
+        app:layout_constraintBottom_toBottomOf="@id/typeIcon"
+        android:text="한의원"
+        android:textSize="17dp"
+        />
+    <ImageView
+        android:id="@+id/timeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/addrIcon"
+        app:layout_constraintTop_toBottomOf="@id/typeIcon"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/baseline_access_time_filled_24"
+        />
+    <TextView
+        android:id="@+id/monTv"
+        app:layout_constraintStart_toStartOf="@id/addr"
+        app:layout_constraintBottom_toBottomOf="@+id/timeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="월 "
+        android:textSize="17dp"
+
+        />
+    <TextView
+        android:id="@+id/monTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/monTv"
+        app:layout_constraintBottom_toBottomOf="@id/monTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/tueTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/monTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="화 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+
+        />
+    <TextView
+        android:id="@+id/tueTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/tueTv"
+        app:layout_constraintBottom_toBottomOf="@id/tueTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/wedTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/tueTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/wedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/wedTv"
+        app:layout_constraintBottom_toBottomOf="@id/wedTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/thurTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/wedTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="목 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/thurTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/thurTv"
+        app:layout_constraintBottom_toBottomOf="@id/thurTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/friTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/thurTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="금 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/friTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/friTv"
+        app:layout_constraintBottom_toBottomOf="@id/friTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/satTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/friTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="토 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/satTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/satTv"
+        app:layout_constraintBottom_toBottomOf="@id/satTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <TextView
+        android:id="@+id/sunTv"
+        app:layout_constraintStart_toStartOf="@id/monTv"
+        app:layout_constraintTop_toBottomOf="@+id/satTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="일 "
+        android:textSize="17dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/sunTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/sunTv"
+        app:layout_constraintBottom_toBottomOf="@id/sunTv"
+        android:text="11:00 ~ 17: 00"/>
+
+    <ImageView
+        android:id="@+id/numberIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_phone_24"
+        app:layout_constraintStart_toStartOf="@+id/addrIcon"
+        app:layout_constraintTop_toBottomOf="@id/sunTime"
+        android:layout_marginTop="30dp"
+
+        />
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:text="02-122-1111"
+        app:layout_constraintStart_toStartOf="@id/addr"
+        app:layout_constraintTop_toTopOf="@+id/numberIcon"
+
+        />
+   <TextView
+       android:id="@+id/info"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textSize="17dp"
+       android:text="02-122-111"
+       android:layout_marginTop="20dp"
+       app:layout_constraintStart_toStartOf="@id/addr"
+       app:layout_constraintTop_toBottomOf="@id/num"
+
+       />
+    <Button
+        android:id="@+id/alarmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300dp"
+        android:height="60dp"
+        android:text="진료 알림 예약"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/info"
+        android:layout_marginTop="25dp"/>
+    <Button
+        android:id="@+id/reviewBtn"
+        android:width="300dp"
+        android:height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/alarmBtn"
+        app:layout_constraintTop_toBottomOf="@id/alarmBtn"
+        android:text="리뷰 기록하기"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

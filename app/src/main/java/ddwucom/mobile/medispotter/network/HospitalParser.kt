@@ -1,6 +1,5 @@
 package ddwucom.mobile.medispotter.network
 
-import android.util.Log
 import android.util.Xml
 import ddwucom.mobile.medispotter.data.Hospital
 import org.xmlpull.v1.XmlPullParser
@@ -17,9 +16,28 @@ class HospitalParser {
         val ITEM_TAG = "item"
         val ADDRESS_TAG = "dutyAddr"
         val LATITUDE_TAG = "wgs84Lat"
-        val LONGOTUDE_TAG = "longitude"
-        val DUTYNAME_TAG = "wgs84Lon"
+        val LONGOTUDE_TAG = "wgs84Lon"
+        val DUTYNAME_TAG = "dutyName"
         val DUTYDIVNAM_TAG = "dutyDivNam"
+        val DUTYINF = "dutyInf"
+        val DUTYTEL = "dutyTel1"
+
+        val TIME1C = "dutyTime1c"
+        val TIME1S ="dutyTime1s"
+        val TIME2C ="dutyTime2c"
+        val TIME2S ="dutyTime2s"
+        val TIME3C ="dutyTime3c"
+        val TIME3S="dutyTime3s"
+        val TIME4C="dutyTime4c"
+        val TIME4S="dutyTime4s"
+        val TIME5C ="dutyTime5c"
+        val TIME5S="dutyTime5s"
+        val TIME6C ="dutyTime6c"
+        val TIME6S="dutyTime6s"
+        val TIME7C="dutyTime7c"
+        val TIME7S="dutyTime7s"
+        val TIME8C="dutyTime8c"
+        val TIME8S="dutyTime8s"
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
@@ -68,6 +86,24 @@ class HospitalParser {
         var latitude: String? = null
         var logitude: String? = null
         var name: String?=null
+        var dutyInfo: String?= null
+        var dutyTel: String? = null
+        var dutyTime1c: String?= null
+        var dutyTime1s: String?= null
+        var dutyTime2c: String?= null
+        var dutyTime2s: String?= null
+        var dutyTime3c: String?= null
+        var dutyTime3s: String?= null
+        var dutyTime4c: String?= null
+        var dutyTime4s: String?= null
+        var dutyTime5c: String?= null
+        var dutyTime5s: String?= null
+        var dutyTime6c: String?= null
+        var dutyTime6s: String?= null
+        var dutyTime7c: String?= null
+        var dutyTime7s: String?= null
+        var dutyTime8c: String?= null
+        var dutyTime8s: String?= null
 
         while (parser.next() != XmlPullParser.END_TAG){
             if(parser.eventType != XmlPullParser.START_TAG){
@@ -79,10 +115,32 @@ class HospitalParser {
                 LATITUDE_TAG-> latitude = readTextInTag(parser, LATITUDE_TAG)
                 LONGOTUDE_TAG -> logitude = readTextInTag(parser, LONGOTUDE_TAG)
                 DUTYDIVNAM_TAG -> dutyDivName = readTextInTag(parser, DUTYDIVNAM_TAG)
+                DUTYINF -> dutyInfo = readTextInTag(parser, DUTYINF)
+                DUTYTEL -> dutyTel = readTextInTag(parser, DUTYTEL)
+                TIME1C-> dutyTime1c = readTextInTag(parser, TIME1C)
+                TIME1S-> dutyTime1s = readTextInTag(parser, TIME1S)
+                TIME2C -> dutyTime2c = readTextInTag(parser, TIME2C)
+                TIME2S -> dutyTime2s = readTextInTag(parser, TIME2S)
+                TIME3C -> dutyTime3c = readTextInTag(parser, TIME3C)
+                TIME3S -> dutyTime3s = readTextInTag(parser, TIME3S)
+                TIME4C -> dutyTime4c = readTextInTag(parser, TIME4C)
+                TIME4S -> dutyTime4s = readTextInTag(parser, TIME4S)
+                TIME5C -> dutyTime5c = readTextInTag(parser, TIME5C)
+                TIME5S -> dutyTime5s= readTextInTag(parser, TIME5S)
+                TIME6C -> dutyTime6c = readTextInTag(parser, TIME6C)
+                TIME6S -> dutyTime6s = readTextInTag(parser, TIME6S)
+                TIME7C -> dutyTime7c = readTextInTag(parser, TIME7C)
+                TIME7S -> dutyTime7s = readTextInTag(parser, TIME7S)
+                TIME8C -> dutyTime8c = readTextInTag(parser, TIME8C)
+                TIME8C -> dutyTime8s = readTextInTag(parser, TIME8S)
+
                 else -> skip(parser)
             }
         }
-        return  Hospital(dutyAddr, dutyDivName, latitude,logitude, name)
+        return  Hospital(null,dutyAddr, dutyDivName, latitude,logitude, name, dutyInfo, dutyTel,
+            dutyTime1c, dutyTime1s, dutyTime2c, dutyTime2s, dutyTime3c, dutyTime3s, dutyTime4c, dutyTime4s,
+            dutyTime5c, dutyTime5s, dutyTime6c, dutyTime6s,dutyTime7c, dutyTime7s,
+            dutyTime8c, dutyTime8s, null, null, 0)
     }
 
     @Throws(IOException::class, XmlPullParserException::class)

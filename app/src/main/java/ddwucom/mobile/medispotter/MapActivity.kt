@@ -2,6 +2,7 @@ package ddwucom.mobile.medispotter
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -10,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.SearchView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -28,29 +34,41 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import ddwu.com.mobile.openapitest.network.hospitalDao
+import ddwucom.mobile.medispotter.data.Hospital
+import ddwucom.mobile.medispotter.data.HospitalDao
+import ddwucom.mobile.medispotter.data.HospitalDatabase
 import ddwucom.mobile.medispotter.databinding.ActivityMapBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
 import java.util.Locale
 
-class MapActivity : AppCompatActivity() {
-    val mapBinding by lazy {
-        ActivityMapBinding.inflate(layoutInflater)
-    }
+class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
     private lateinit var googleMap : GoogleMap
+    private lateinit var mapBinding : ActivityMapBinding
     var centerMarker : Marker? = null
 
+    var searchRes: List<Hospital>? =null
     private lateinit var fusedLocationClient : FusedLocationProviderClient
     private lateinit var geocoder : Geocoder
     private lateinit var currentLoc : Location
+
+    var selectedType: String? = null
+    var selectedOption : String? = null
+    var selectedOpen: String? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        mapBinding =  ActivityMapBinding.inflate(layoutInflater)
         setContentView(mapBinding.root)
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MapActivity)
 
@@ -70,13 +88,69 @@ class MapActivity : AppCompatActivity() {
             startLocUpdates()
         }
 //        showData("Geocoder isEnabled: ${Geocoder.isPresent()}")
+
+        //spinner
+        val typeSpinner = mapBinding.type
+        val openSpinner = mapBinding.open
+        val optionSpinner = mapBinding.option
+        // Create arrays for spinner items
+        val typeItems = arrayOf("한의원", "치과의원", "의원", "요양병원", "보건소", "한방병원", "내과", "산부인과")
+        val openItems = arrayOf("전체", "영업중")
+        val optionItems = arrayOf("지역검색", "이름검색")
+
+        // Create ArrayAdapter for each Spinner
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeItems)
+        val openAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, openItems)
+        val optionAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, optionItems)
+
+        // Set dropdown layout style
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        openAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        optionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Set ArrayAdapter to Spinners
+        typeSpinner.adapter = typeAdapter
+        openSpinner.adapter = openAdapter
+        optionSpinner.adapter = optionAdapter
+
+        typeSpinner.onItemSelectedListener = this
+        openSpinner.onItemSelectedListener = this
+        optionSpinner.onItemSelectedListener = this
+
+        val searchView = mapBinding.search
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrBlank()) {
+                    performSearch(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle query text change
+                // You can use this for live search suggestions, etc.
+                return true
+            }
+        })
+
     }
 
     val mapReadyCallback = object: OnMapReadyCallback {
         override fun onMapReady(map: GoogleMap) {
             googleMap = map
+
+            googleMap.setOnInfoWindowClickListener { marker ->
+                val hospitalId = marker.tag as? Int
+                if (hospitalId != null) {
+                    val intent = Intent(this@MapActivity, HospitalDetailActivity::class.java)
+                    intent.putExtra("hospitalId", hospitalId)
+                    startActivity(intent)
+                }
+            }
         }
     }
+
+
 
     override fun onPause() {
         super.onPause()
@@ -173,5 +247,93 @@ class MapActivity : AppCompatActivity() {
 
 
     }
+    fun addHosMarker(hospitals: List<Hospital>) {  // LatLng(37.606320, 127.041808)
+        var hospitalLoc: LatLng?= null
+
+        for (hospital in hospitals) {
+
+            Log.d("MapActivity", " ${hospital.longitude!!.toDouble()}")
+            hospitalLoc = LatLng(hospital.latitude!!.toDouble(), hospital.longitude!!.toDouble())
+
+            val markerOptions: MarkerOptions = MarkerOptions()
+            if (hospitalLoc != null) {
+                markerOptions.position(hospitalLoc)
+                    .title(hospital.name)  // Use hospital name as the marker title
+                    .snippet(hospital.dutyTel1)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            }
+
+
+            val marker = googleMap.addMarker(markerOptions)
+            marker?.showInfoWindow()
+
+            marker?.tag = hospital._id
+        }
+        hospitalLoc?.let { CameraUpdateFactory.newLatLngZoom(it,17F) }
+            ?.let { googleMap.animateCamera(it) }
+
+    }
+
+
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (parent?.id) {
+            R.id.type -> {
+                // Handle selection for typeSpinner
+                selectedType = parent.getItemAtPosition(position).toString()
+                Log.d("MapActivity", "Selected Type: $selectedType")
+            }
+            R.id.open -> {
+                // Handle selection for openSpinner
+                selectedOpen = parent.getItemAtPosition(position).toString()
+                Log.d("MapActivity", "Selected Open Status: $selectedOpen")
+            }
+            R.id.option->{
+                selectedOption = parent.getItemAtPosition(position).toString()
+            }
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
+    }
+    private fun performSearch(query: String?) {
+
+        if (!query.isNullOrBlank()) {
+            if(selectedOption=="지역검색"){
+                    Log.d("MapActivity", "Selected Type: $selectedType")
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            searchRes = hospitalDao.getHospitalByAddrType(query, selectedType!!)
+                            searchRes?.let {
+                                Log.d("NM", it.size.toString())
+                                addHosMarker(it)
+                            }
+                        } catch (e: Exception) {
+                            // Handle exceptions if necessary
+                            e.printStackTrace()
+                        }
+                    }
+            }
+            else{
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        searchRes = hospitalDao.getHospitalByNameType(query, selectedType!!)
+                        searchRes?.let {
+                            Log.d("NM", it.size.toString())
+                            addHosMarker(it)
+                        }
+                    } catch (e: Exception) {
+                        // Handle exceptions if necessary
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+        }
+    }
+
 
 }
+
+

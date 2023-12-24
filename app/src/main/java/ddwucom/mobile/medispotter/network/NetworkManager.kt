@@ -2,8 +2,15 @@ package ddwu.com.mobile.openapitest.network
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
+//import androidx.room.Room
+//import androidx.room.RoomDatabase
 import ddwucom.mobile.medispotter.R
 import ddwucom.mobile.medispotter.data.Hospital
+import ddwucom.mobile.medispotter.data.HospitalDao
+import ddwucom.mobile.medispotter.data.HospitalDatabase
+//import ddwucom.mobile.medispotter.data.HospitalDao
+//import ddwucom.mobile.medispotter.data.HospitalDatabase
 import ddwucom.mobile.medispotter.network.HospitalParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,42 +22,75 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import javax.net.ssl.HttpsURLConnection
 import kotlin.jvm.Throws
 import kotlin.text.StringBuilder
-
+lateinit var db : HospitalDatabase
+lateinit var hospitalDao: HospitalDao
 
 class NetworkManager(val context: Context) {
     private val TAG = "NetworkManager"
 
+    //
     val openApiUrl by lazy {
         context.resources.getString(R.string.hospital_url)
     }
 
+    init {
+        db = Room.databaseBuilder(context.applicationContext,
+            HospitalDatabase::class.java, "hospital_db")
+            .build()
+        /*FoodDatabase 생성*/
+        hospitalDao = db.hospitalDao()
+
+
+    }
+    private suspend fun saveHospitalsToDatabase(hospitals: List<Hospital>) {
+        withContext(Dispatchers.IO) {
+            hospitalDao.insertAll(hospitals)
+        }
+    }
     @Throws(IOException::class)
-    suspend fun downloadXml(location1: String, lacation2: String) : List<Hospital>? {    val urlBuilder = StringBuilder(openApiUrl)
-        urlBuilder.append("?"+ URLEncoder.encode("serviceKey", "UTF-8") + "=VgnAmvRIZCJfNOvf4sf9%2BXH53u6BdwKRdv9bixebAuK1tCRqJlVT%2B0Do76KmIUP3uz1yAmjjRZm6DPYa9iM%2FeA%3D%3D") /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("Q0", "UTF-8") + "=" + URLEncoder.encode(location1, "UTF-8")) /*주소(시도)*/
-        urlBuilder.append("&" + URLEncoder.encode("Q1", "UTF-8") + "=" + URLEncoder.encode(lacation2, "UTF-8")) /*주소(시군구)*/
+    suspend fun downloadXml() : List<Hospital>? {    val urlBuilder = StringBuilder(openApiUrl)
 
-        var hospitals: List<Hospital>? = null
-        val inputStream = downloadUrl(urlBuilder)
-        val parser = HospitalParser()
-//        // Check if the inputStream is not null before reading it
-        inputStream?.let {
-            hospitals = parser.parse(it)
-            Log.d("parse 끝나고 되돌아옴", hospitals.toString())
+        val hospitals = mutableListOf<Hospital>()
+
+        val chunkSize = 8
+        for (chunk in 0 until 2) { // 16 / 8 = 2 chunks
+            for (pageNo in chunk * chunkSize + 1..(chunk + 1) * chunkSize) {
+                val urlBuilder = StringBuilder(openApiUrl)
+                urlBuilder.append("?")
+                    .append(URLEncoder.encode("serviceKey", "UTF-8"))
+                    .append("=VgnAmvRIZCJfNOvf4sf9%2BXH53u6BdwKRdv9bixebAuK1tCRqJlVT%2B0Do76KmIUP3uz1yAmjjRZm6DPYa9iM%2FeA%3D%3D")
+                    .append("&")
+                    .append(URLEncoder.encode("pageNo", "UTF-8"))
+                    .append("=")
+                    .append(pageNo)
+                    .append("&")
+                    .append(URLEncoder.encode("numOfRows", "UTF-8"))
+                    .append("=")
+                    .append(5000)
+
+                val inputStream = downloadUrl(urlBuilder)
+                inputStream?.let {
+                    val parser = HospitalParser()
+                    val hospitalsPerPage = parser.parse(it)
+                    hospitals.addAll(hospitalsPerPage)
+                    Log.d("Page $pageNo parsed", "Total Hospitals: ${hospitals.size}")
+                }
+
+                // Close the InputStream after reading its content
+                inputStream?.close()
             }
-//
-//        // Close the InputStream after reading its content
-//        inputStream?.close()
-        /*Parser 생성 및 parsing 수행*/
-//        inputStream?.use {
-//            /*Parser 생성 및 parsing 수행*/
-//            val parser = HospitalParser()
-//            hospitals = parser.parse(it)
-//        }
 
-        return hospitals
+            // Save hospitals to the Room database after each chunk
+            saveHospitalsToDatabase(hospitals)
+
+            // Clear the list for the next chunk
+            hospitals.clear()
+        }
+
+        return hospitals.takeIf { it.isNotEmpty() }
     }
 
 
@@ -59,14 +99,14 @@ class NetworkManager(val context: Context) {
         return withContext(Dispatchers.IO) {
             val url = URL(urlString.toString())
             Log.d("DSd", url.toString())
-            (url.openConnection() as? HttpURLConnection)?.run {
+            (url.openConnection() as? HttpsURLConnection)?.run {
                 readTimeout = 10000
                 connectTimeout = 10000
                 requestMethod = "GET"
                 doInput = true
 
                 // Check if the request was successful (status code 200)
-                if (responseCode == HttpURLConnection.HTTP_OK) {
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
                     connect()
                     return@withContext inputStream // Return the InputStream when successful
                 } else {
@@ -81,29 +121,5 @@ class NetworkManager(val context: Context) {
     }
 
 
-    // InputStream 을 String 으로 변환
-// InputStream 을 String 으로 변환
-    private fun readStreamToString(iStream: InputStream?): String {
-        val resultBuilder = StringBuilder()
-
-        iStream?.use { inputStream ->
-            val inputStreamReader = InputStreamReader(inputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
-
-            var readLine: String? = bufferedReader.readLine()
-            while (readLine != null) {
-                resultBuilder.append(readLine + System.lineSeparator())
-                readLine = bufferedReader.readLine()
-            }
-        }
-
-        return resultBuilder.toString()
-    }
-
-
-    // InputStream 을 Bitmap 으로 변환
-//    private fun readStreamToImage(iStream: InputStream?) : Bitmap {
-//        val bitmap = BitmapFactory.decodeStream(iStream)
-//        return bitmap
-//    }
 }
+
