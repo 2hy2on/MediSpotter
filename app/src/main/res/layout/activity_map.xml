@@ -6,40 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
+
     <SearchView
-        android:id="@+id/search"
+        android:id="@+id/search_view"
         android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:focusable="true"
-        android:padding="20dp"
-        app:iconifiedByDefault="false"
+        android:layout_height="wrap_content"
+        android:queryHint="검색어를 입력하시오"
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="1"
-        app:queryHint="검색어를 입력하시오" />
 
+        />
     <Spinner
         android:id="@+id/option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/search"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/search"
-        app:layout_constraintEnd_toStartOf="@id/search"/>
+        app:layout_constraintTop_toTopOf="@id/search_view"
+        app:layout_constraintEnd_toStartOf="@id/search_view"
+       />
 
     <Spinner
         android:id="@+id/type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search" />
+        tools:ignore="MissingConstraints" />
     <Spinner
         android:id="@+id/open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/type"
-        app:layout_constraintTop_toBottomOf="@id/search" />
+        tools:ignore="MissingConstraints" />
 
 
     <fragment
@@ -53,7 +52,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@id/type"
-        map:cameraTargetLat="37.606537"
+        map:cameraTargetLat="37.06537"
         map:cameraTargetLng="127.041758"
         map:cameraZoom="13"
         map:mapType="normal"

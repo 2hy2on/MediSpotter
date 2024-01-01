@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
     <application
         android:allowBackup="true"
@@ -16,8 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediSpotter"
-        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCLzL-SvDnrXH_rWIWYmGhqdXco0CLPmrs" />
         <activity
             android:name=".HospitalDetailActivity"
             android:exported="false" />
@@ -26,28 +30,25 @@
             android:exported="false" />
 
         <activity
-            android:name=".MemoActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDHJcsTprQAE8zMjq8GBNSX7-Hb5ZWum2k" />
-
-        <activity
             android:name=".MapActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".MyBroadcastReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="MY_CHANNEL2" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

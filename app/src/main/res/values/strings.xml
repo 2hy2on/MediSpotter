@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MediSpotter</string>
     <string name="hospital_url">https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncFullDown</string>
+    <string name="channel_id">MY_CHANNEL2</string>
 </resources>

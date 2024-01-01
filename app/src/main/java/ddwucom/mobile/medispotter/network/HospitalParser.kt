@@ -79,7 +79,7 @@ class HospitalParser {
         return hospital
     }
 
-    private fun readHospital(parser:XmlPullParser): Hospital{
+    private fun readHospital(parser: XmlPullParser): Hospital {
         parser.require(XmlPullParser.START_TAG, ns, ITEM_TAG)
         var dutyAddr: String? = null
         var dutyDivName: String? = null
@@ -144,7 +144,7 @@ class HospitalParser {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readTextInTag(parser:XmlPullParser, tag: String): String{
+    private fun readTextInTag(parser: XmlPullParser, tag: String): String{
         parser.require(XmlPullParser.START_TAG, ns, tag)
         var text = ""
         if (parser.next() == XmlPullParser.TEXT) {

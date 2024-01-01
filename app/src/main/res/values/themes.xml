@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MediSpotter" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Base.Theme.MediSpotter" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#154c79</item>
     </style>
 
     <style name="Theme.MediSpotter" parent="Base.Theme.MediSpotter" />

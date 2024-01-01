@@ -11,6 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="병원 이름"
+        android:textColor="#154c79"
+        android:textFontWeight="500"
         android:textSize="40dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,8 +33,9 @@
     <ImageView
         android:id="@+id/addrIcon"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="30dp"
+
         android:src="@drawable/baseline_location_on_24"
 
         android:layout_marginLeft="20dp"
@@ -48,7 +51,7 @@
         android:layout_marginLeft="5dp"
         android:textSize="15dp"
         app:layout_constraintTop_toBottomOf="@+id/name"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         />
 
  =
@@ -86,6 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="월 "
+        android:textColor="@color/black"
         android:textSize="17dp"
 
         />
@@ -106,7 +110,7 @@
         android:text="화 "
         android:textSize="17dp"
         android:layout_marginTop="5dp"
-
+        android:textColor="@color/black"
         />
     <TextView
         android:id="@+id/tueTime"
@@ -125,6 +129,7 @@
         android:text="수 "
         android:textSize="17dp"
         android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         />
     <TextView
         android:id="@+id/wedTime"
@@ -143,6 +148,7 @@
         android:text="목 "
         android:textSize="17dp"
         android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         />
     <TextView
         android:id="@+id/thurTime"
@@ -153,6 +159,7 @@
         android:text="11:00 ~ 17: 00"/>
 
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/friTv"
         app:layout_constraintStart_toStartOf="@id/monTv"
         app:layout_constraintTop_toBottomOf="@+id/thurTv"
@@ -171,6 +178,7 @@
         android:text="11:00 ~ 17: 00"/>
 
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/satTv"
         app:layout_constraintStart_toStartOf="@id/monTv"
         app:layout_constraintTop_toBottomOf="@+id/friTv"
@@ -189,6 +197,7 @@
         android:text="11:00 ~ 17: 00"/>
 
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/sunTv"
         app:layout_constraintStart_toStartOf="@id/monTv"
         app:layout_constraintTop_toBottomOf="@+id/satTv"
@@ -248,7 +257,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/info"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="55dp"
+        android:backgroundTint="#154c79"/>
     <Button
         android:id="@+id/reviewBtn"
         android:width="300dp"
@@ -260,5 +270,18 @@
         android:text="리뷰 기록하기"
         android:layout_marginTop="10dp"
         android:textSize="20dp"
+        android:backgroundTint="#154c79"
         />
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="뒤로 가기"
+        android:textColor="@color/black"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/name"
+        app:layout_constraintEnd_toStartOf="@+id/name"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@ import ddwucom.mobile.medispotter.data.Hospital
 import ddwucom.mobile.medispotter.databinding.ListHostpitalBinding
 
 class HospitalAdapter:
-RecyclerView.Adapter<HospitalAdapter.HospitalViewHolder>(){
+    RecyclerView.Adapter<HospitalAdapter.HospitalViewHolder>(){
     var hospitals: List<Hospital>?=null
 
     interface OnItemCLickListener{

@@ -14,7 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SearchView
+import android.widget.SearchView  // Add this import statement
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,11 +34,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import ddwu.com.mobile.openapitest.network.hospitalDao
 import ddwucom.mobile.medispotter.data.Hospital
 import ddwucom.mobile.medispotter.data.HospitalDao
 import ddwucom.mobile.medispotter.data.HospitalDatabase
 import ddwucom.mobile.medispotter.databinding.ActivityMapBinding
+import ddwucom.mobile.medispotter.network.hospitalDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -47,6 +47,7 @@ import kotlinx.coroutines.withContext
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.util.Locale
+
 
 class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -69,6 +70,25 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         mapBinding =  ActivityMapBinding.inflate(layoutInflater)
         setContentView(mapBinding.root)
+
+
+
+        mapBinding.searchView.isSubmitButtonEnabled = true
+        val queryTextListener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrBlank()) {
+                    performSearch(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle query text change
+                // You can use this for live search suggestions, etc.
+                return true
+            }
+        }
+        mapBinding.searchView.setOnQueryTextListener(queryTextListener)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MapActivity)
 
@@ -116,23 +136,6 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         openSpinner.onItemSelectedListener = this
         optionSpinner.onItemSelectedListener = this
 
-        val searchView = mapBinding.search
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrBlank()) {
-                    performSearch(query)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                // Handle query text change
-                // You can use this for live search suggestions, etc.
-                return true
-            }
-        })
-
     }
 
     val mapReadyCallback = object: OnMapReadyCallback {
@@ -158,6 +161,7 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun checkPermissions () {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -173,6 +177,7 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     /*registerForActivityResult 는 startActivityForResult() 대체*/
+    @RequiresApi(Build.VERSION_CODES.N)
     val locationPermissionRequest
             = registerForActivityResult( ActivityResultContracts.RequestMultiplePermissions() ) {
             permissions ->
@@ -297,23 +302,24 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
     }
+
     private fun performSearch(query: String?) {
 
         if (!query.isNullOrBlank()) {
             if(selectedOption=="지역검색"){
-                    Log.d("MapActivity", "Selected Type: $selectedType")
-                    CoroutineScope(Dispatchers.Main).launch {
-                        try {
-                            searchRes = hospitalDao.getHospitalByAddrType(query, selectedType!!)
-                            searchRes?.let {
-                                Log.d("NM", it.size.toString())
-                                addHosMarker(it)
-                            }
-                        } catch (e: Exception) {
-                            // Handle exceptions if necessary
-                            e.printStackTrace()
+                Log.d("MapActivity", "Selected Type: $selectedType")
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        searchRes = hospitalDao.getHospitalByAddrType(query, selectedType!!)
+                        searchRes?.let {
+                            Log.d("NM", it.size.toString())
+                            addHosMarker(it)
                         }
+                    } catch (e: Exception) {
+                        // Handle exceptions if necessary
+                        e.printStackTrace()
                     }
+                }
             }
             else{
                 CoroutineScope(Dispatchers.Main).launch {
@@ -333,7 +339,8 @@ class MapActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-
 }
+
+
 
 

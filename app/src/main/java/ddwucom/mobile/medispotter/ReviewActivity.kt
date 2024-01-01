@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
-import ddwu.com.mobile.openapitest.network.hospitalDao
+
 import ddwucom.mobile.medispotter.data.Hospital
 import ddwucom.mobile.medispotter.databinding.ActivityReviewBinding
+import ddwucom.mobile.medispotter.network.hospitalDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,8 +24,7 @@ class ReviewActivity : AppCompatActivity() {
         if (receivedIntent != null) {
             hospital = receivedIntent.getSerializableExtra("hospital") as? Hospital
             if (hospital != null) {
-                // Now you have the Hospital object in the receiving activity
-                // Do something with it...
+
             } else {
                 Log.e("ReviewActivity", "Invalid Hospital object received")
             }
@@ -32,7 +32,9 @@ class ReviewActivity : AppCompatActivity() {
         reviewbinding.name.text = hospital?.name
         reviewbinding.rate.rating = hospital?.rating ?: 0.0f
         hospital?.review?.let { Log.d("DDDDDDDDD", it) }
-        reviewbinding.review.setText(hospital?.review)
+        val reviewText = hospital?.review ?: ""
+        val editable = Editable.Factory.getInstance().newEditable(reviewText)
+        reviewbinding.review.text = editable
 
         reviewbinding.save.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {

@@ -1,33 +1,23 @@
-package ddwu.com.mobile.openapitest.network
+package ddwucom.mobile.medispotter.network
 
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-//import androidx.room.Room
-//import androidx.room.RoomDatabase
 import ddwucom.mobile.medispotter.R
 import ddwucom.mobile.medispotter.data.Hospital
 import ddwucom.mobile.medispotter.data.HospitalDao
 import ddwucom.mobile.medispotter.data.HospitalDatabase
-//import ddwucom.mobile.medispotter.data.HospitalDao
-//import ddwucom.mobile.medispotter.data.HospitalDatabase
-import ddwucom.mobile.medispotter.network.HospitalParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 import kotlin.jvm.Throws
-import kotlin.text.StringBuilder
+
 lateinit var db : HospitalDatabase
 lateinit var hospitalDao: HospitalDao
-
 class NetworkManager(val context: Context) {
     private val TAG = "NetworkManager"
 
@@ -119,7 +109,4 @@ class NetworkManager(val context: Context) {
             return@withContext null
         }
     }
-
-
 }
-

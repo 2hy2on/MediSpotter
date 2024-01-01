@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+
+        android:title="Search"
+        android:id="@+id/search_bt"
+        android:icon="@drawable/baseline_search_24"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Review"
+        android:icon="@drawable/baseline_rate_review_24"
+        android:id="@+id/review_btn"
+        />
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Favorite"
+        android:id="@+id/favorite_btn"
+        android:icon="@drawable/baseline_star_24"/>
+</menu>
