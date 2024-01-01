@@ -3,4 +3,4 @@
 
 
 [1.pdf](https://github.com/2hy2on/MediSpotter/files/13804028/1.pdf)
-[2.pdf](https://github.com/2hy2on/MediSpotter/files/13804030/2.pdf)
+
