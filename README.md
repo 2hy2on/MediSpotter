@@ -13,4 +13,5 @@
 ![02_20210793_9](https://github.com/2hy2on/MediSpotter/assets/80164690/24c56ac5-72c6-489d-8b85-372f089fe1c5)
 
 ### 시현 영상
-![제목 없는 동영상 - Clipchamp로 제작 (1)](https://github.com/2hy2on/MediSpotter/assets/80164690/ef92dc65-6165-4c2a-954c-43ca0eb70fb1)
+https://github.com/2hy2on/MediSpotter/assets/80164690/a130e5de-221f-4c73-9b80-99a270e81fa8
+
